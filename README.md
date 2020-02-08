@@ -1,5 +1,6 @@
-        -[XOLO]- 
-===========================
+ [XOLO] 
+--------
+
 Author: ET Lownoise 
 Version: 1.0
 

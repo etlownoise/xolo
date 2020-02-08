@@ -1,5 +1,6 @@
  [XOLO] 
 --------
+![Xolo Logo](/static/icons/xolo-logo.png)
 
 Author: ET Lownoise 
 Version: 1.0

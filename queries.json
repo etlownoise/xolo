@@ -1,0 +1,80 @@
+{
+"Queries":[
+ {
+   "Type": "Information Gathering",
+   "Title": "Database Links",
+   "Query": "SELECT srvname FROM master..sysservers"
+ },
+ {
+   "Type": "Information Gathering",
+   "Title": "Server Name",
+   "Query": "SELECT @@servername"
+ },
+ {
+   "Type": "Information Gathering",
+   "Title": "Version",
+   "Query": "SELECT @@version"
+ },
+ {
+   "Type": "Information Gathering",
+   "Title": "Current User",
+   "Query": "SELECT SUSER_SNAME()"
+ },
+ {
+   "Type": "Information Gathering",
+   "Title": "Current Role",
+   "Query": "SELECT IS_SRVROLEMEMBER('sysadmin')"
+ },
+ {
+   "Type": "Information Gathering",
+   "Title": "Current Database",
+   "Query": "SELECT db_name()"
+ },
+ {
+   "Type": "Information Gathering",
+   "Title": "List All Databases",
+   "Query": "SELECT name FROM master..sysdatabases"
+ },
+ {
+   "Type": "Information Gathering",
+   "Title": "List All Logins",
+   "Query": "SELECT * FROM sys.server_principals WHERE type_desc != 'SERVER_ROLE'"
+ },
+ {
+   "Type": "Information Gathering",
+   "Title": "List All Users for Database",
+   "Query": "SELECT * FROM sys.database_principals WHERE type_desc != 'DATABASE_ROLE'"
+ },
+ {
+   "Type": "Information Gathering",
+   "Title": "List All Sysadmins",
+   "Query": "SELECT name,type_desc,is_disabled FROM sys.server_principals WHERE IS_SRVROLEMEMBER ('sysadmin',name) = 1"
+ },
+ {
+   "Type": "Information Gathering",
+   "Title": "Effective Permissions for Server",
+   "Query": "SELECT * FROM fn_my_permissions(NULL, 'SERVER');"
+ },
+ {
+   "Type": "Information Gathering",
+   "Title": "Effective Permissions for Database",
+   "Query": "SELECT * FROM fn_my_permissions(NULL, 'DATABASE');"
+ },
+ {
+   "Type": "Information Gathering",
+   "Title": "Active User Tokens",
+   "Query": "SELECT * FROM sys.user_token"
+ },
+ {
+   "Type": "Information Gathering",
+   "Title": "Active Login Tokens",
+   "Query": "SELECT * FROM sys.login_token"
+ },
+ {
+   "Type": "Command execution",
+   "Title": "Command execution xp_cmdshell",
+   "Query": "EXEC xp_cmdshell 'whoami'"
+ }
+]
+}
+

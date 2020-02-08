@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="Efrain 'ET' Torres">
+
+    <title>Xolo</title>
+<style>
+.navbar {
+	display: flex;
+	align-items: center;
+	justify-content: center; /* align horizontal */
+	align-items: center; /* align vertical */
+	background-color: #fdec00;
+	margin: 0;
+    padding: 0;
+	outline: 6px solid #f4dd08;
+	width: 100%;
+	overflow: hidden;
+	/*resize: both;*/
+	vertical-align: middle;
+	height: 18%;
+}
+
+.panel {
+	display: flex;
+}
+
+.logopane {
+    width: 11%;
+	margin: 0;
+    padding: 0;
+	background-color: #fdec00;
+}
+
+.smenupane {
+    width: 30%;
+	margin: 0;
+    padding: 0;
+	background-color: #dddddd;
+	overflow: hidden;
+	border:2px solid #cccccc;
+}
+		
+.logopane img {
+   width: 100%;
+   height: auto;
+   background-color: #fdec00;
+}
+
+.split {
+    width: 15px;
+    background: #fdec00;
+    position: relative;
+    cursor: col-resize;
+	margin: 0;
+    padding: 0;
+	height: 100%;
+	/*resize: horizontal;*/
+}
+
+.menupane {
+	display: flex; /* added */
+	align-items: center;
+    flex: auto;
+	margin: 0;
+    padding: 0;
+	height: 100%;
+	background-color: #fdec00;
+	/*resize: horizontal;*/
+}
+		
+.rightpane {
+	display: flex; /* added */
+	align-items: center;
+    flex: auto;
+	margin: 0;
+    padding: 0;
+	height: 100%;
+	background-color: #fdec00;
+	/*resize: horizontal;*/
+}
+
+input,
+button,
+select {
+	border-radius: 3px;
+	font: 12px sans-serif;
+	border:0px solid white;
+}
+
+input:hover,
+input:focus {
+    outline: none !important;
+	border:1px solid white;
+    box-shadow: 0 0 4px #c2af0a;
+}
+
+button:hover,
+button:focus {
+    outline: none !important;
+    border:1px solid white;
+    box-shadow: 0 0 4px #c2af0a;
+}
+
+select:hover,
+select:focus {
+    outline: none !important;
+    border:1px solid white;
+    box-shadow: 0 0 4px #c2af0a;
+}
+
+select option {
+    margin: 40px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.link {
+	stroke: #403f45;
+}
+
+.node text {
+	pointer-events: none;
+	font: 10px sans-serif;
+}
+
+.node .selected {
+	stroke: red;
+}
+
+.wrapper {
+    border:1px solid #000;
+    display:inline-block;
+}
+
+.logo {
+    vertical-align: middle;
+}
+
+.rectres {
+	stroke: #fdec00;
+    stroke-width: 3;
+    fill: white;
+	fill-opacity: 0.9;
+}
+
+svg {
+	margin-left:auto;
+	margin-right:auto;
+	display:block;
+	overflow:auto;
+	background-color: white;
+}
+
+div {
+	overflow-y: auto;
+	overflow-x: auto;
+	background-color: white;	
+}
+
+.slider {
+	vertical-align: middle
+}
+
+.selectednode {
+	background-color: #fdec00;
+	border:2px solid #f4dd08;
+	font: 10px sans-serif;
+	margin: 2;
+	padding: 5px 5px; 
+	width:90%;
+	display: inline-block;
+	overflow-wrap: break-word;  
+}
+
+.pathfromstart {
+	background-color: white;
+	border:2px solid #f4dd08;
+	font: 10px sans-serif;
+	margin: 2;
+	padding: 5px 5px; 
+	overflow-wrap: break-word;
+	width:90%;
+	max-width:90%;
+	min-width:90%;
+	display: inline-block;
+}
+
+.titlemenu { 
+	font-weight: bold;
+	font: 11px sans-serif;
+	margin: 2;
+	padding: 6px 6px; 
+}
+
+</style>
+</head>
+<body>
+	
+	<div id="headnav" class="navbar" >
+		<div class="logopane" id="logopane" contentEditable="false">
+			<center>
+			<img src = "static/icons/xolo-logo.png" class = "logo" alt = "Xolo - ET Lownoise 2020" /></center>
+		</div>
+		<div class="split" id="split" ></div>
+		<div class="menupane" id="menupane" ><center>
+			
+			<input placeholder="Server[,Port]\Instance" type="search" id="serverquery" onsearch="runQuery()">
+			<input placeholder="Database" type="search" id="dataquery" onsearch="runQuery()">
+			<input placeholder="Username" type="search" id="userquery" onsearch="runQuery()">
+			<input placeholder="Password" type="search" id="passquery" onsearch="runQuery()">
+			<input placeholder="Max.Level" type="search" id="maxlevel" title="Max Search Level" value="3" maxlength="2" size="3" onsearch="runQuery()">
+			<input placeholder="Max.Nodes" type="search" id="maxnodes" title="Max Nodes per Level" value="10" maxlength="2" size="3" onsearch="runQuery()">
+			<button onclick="runQuery()" id="searchbutton">Search</button>
+			<select style="margin:0 auto;width: 100px;margin-left:3px;margin-right:10px" id="dbtype" onchange="changetype()">
+				<option selected>SQL Server</option>
+				<option>Test</option>
+			</select></center>
+		</div>
+		<div class="split" id="split" ></div>
+		<div class="rightpane" id="rightpane" >
+		<center>		
+			<button onclick="refreshSVG()" id="reloadbutton" title="Reload JSON Graph">Reload</button>
+			<input type="range" min="50" max="350" value="175" class="slider" id="myRange" title="Edge Length" onchange="refreshSVG()">
+			<input id="targetNode" name="targetNode" list="targetlist" type="search" placeholder="Node name"/>
+			<datalist id="targetlist" onclick="findNode()"></datalist>
+			<button onclick="findNode()" id="findbutton" title="Find Node in Graph">Find node</button>
+			<button onclick="about()" id="about" title="About Xolo">About</button>
+		</center>
+		</div>
+	</div>
+	<br>
+	<div class="panel">	
+	<div>
+		<svg height="768"  width="2000" ></svg>
+	</div>
+	<div class="split"></div>
+	<div class="smenupane">
+		<center><label class="titlemenu" >Selected target database:</label></center>
+		<center><label id="selectednode" class="selectednode" >NONE</label></center>
+		<center>
+		<center><label class="titlemenu" >Full path to selected db:</label></center>
+		<textarea id = "pathfromstart" class = "pathfromstart" readonly rows = "3">None</textarea></center>
+		<center><label class="titlemenu" >SQL Query:</label></center>
+		<center><textarea id = "sqlquery" class = "pathfromstart" rows = "3">SELECT is_srvrolemember('sysadmin')</textarea></center>
+		<center><button onclick="convertsql()" id="convertsql">Convert</button>
+		<button onclick="sendsql()" id="sendsql">Query</button>
+		<button onclick="sendsqlall()" id="sendsqlall">Query ALL</button></center>
+		<center>	
+		<input type="checkbox" id="showresults" name="showresults"  onchange="showresults()" title="Limited to 80 chars of first row of results">
+		<label class="titlemenu" for="showresults">Show/Hide results</label>
+		<br>
+		<button onclick="download_csv()" id="downloadcsv">Download CSV</button></center>
+		<br>
+		<center>
+		<input id="boxquerylist" onchange="populatequery(this)" name="boxquerylist" list="querylist" size='' style='width:95%;margin:3px;border:2px'  placeholder="Useful queries"/>
+		<datalist id="querylist" ></datalist>
+		</center>
+		<br>
+		<br>
+		<center>
+		<button onclick="resetresults()" id="resetresults">Reset results</button>
+		</center>		
+	</div>
+	</div>
+    <!-- Header -->
+
+    <script src="https://d3js.org/d3.v4.min.js" type="text/javascript"></script>
+	<script src="https://d3js.org/d3-selection-multi.v1.js"></script>
+
+            
+    <!-- jQuery -->
+    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
+   <!-- Bootstrap Core JavaScript -->
+    <!-- Plugin JavaScript 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script> -->
+	<script>
+	
+	var dbresults = new Map();
+	
+	getqueries();
+	
+	document.body.style.backgroundColor = "#e1dcd9";
+	
+	var sQuery = document.getElementById("serverquery");
+	sQuery.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("searchbutton").click();
+    }
+	});
+	
+	var dQuery = document.getElementById("dataquery");
+	dQuery.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("searchbutton").click();
+    }
+	});
+	
+	var uQuery = document.getElementById("userquery");
+	uQuery.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("searchbutton").click();
+    }
+	});
+	
+	var pQuery = document.getElementById("passquery");
+	pQuery.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("searchbutton").click();
+    }
+	});
+	
+	function about(){
+		//No fancy about, a d3 learning chaos to create a tool to play with db links
+		alert("Xolo v1.0 - ET Lownoise @etlow Feb/2020");
+	}
+	
+	function resetresults(){
+		dbresults = new Map();
+		document.getElementById("showresults").checked = false;
+		respanels(false);		
+		alert("DB results clean.");
+	}
+	
+	function populatequery(selt){
+		document.getElementById("sqlquery").value = document.getElementById("boxquerylist").value;
+		document.getElementById("boxquerylist").value="";
+	}
+	
+	function getqueries(){		
+		var querylist = document.getElementById("querylist");
+			querylist.innerHTML = '';
+			var optArray = [];
+			
+		$.get("/getqueries", function(data) {
+			for(i=0; i< data.Queries.length; i++)
+			{
+				var optionNode = document.createElement("option");
+				optionNode.text = data.Queries[i].Title;
+				optionNode.value = data.Queries[i].Query;
+				querylist.appendChild(optionNode);
+			}
+		});
+		
+	}
+	
+	function changetype(){
+		var site = document.getElementById("dbtype").value;
+		console.log("DB type changed to "+site)
+		
+		$.post( "/switch", {
+			javascript_data: site 
+		});
+		var svg2 = d3.select("svg>g");
+		if(svg2.empty()){
+			console.log("NO SVG exists for now");
+		}else{
+			d3.selectAll("svg > *").remove();
+		}
+	}
+	
+	function runQuery(){
+		dbresults = new Map();
+	
+		var ssQuery = document.getElementById("serverquery").value;
+		var dsQuery = document.getElementById("dataquery").value;
+		var usQuery = document.getElementById("userquery").value;
+		var psQuery = document.getElementById("passquery").value;
+		var maxQuery = document.getElementById("maxlevel").value;
+		var maxNodes = document.getElementById("maxnodes").value;
+		var dbQuery = document.getElementById("dbtype").value;
+		
+		document.getElementById("searchbutton").disabled = true;
+		document.getElementById("searchbutton").innerHTML = "Wait... ";
+		
+		$.post( "/search", {
+			driver: dbQuery,
+			server: ssQuery.toUpperCase(),
+			userid: usQuery,
+			passid: psQuery,
+			database: dsQuery,
+			maxlevel: maxQuery,
+			maxnodes: maxNodes
+			
+		},
+        function(data,status){
+			var svg2 = d3.select("svg>g");
+			if(svg2.empty()){
+			console.log("NO SVG exists for now");
+			}else{
+			d3.selectAll("svg > *").remove();
+			}
+			refreshSVG()
+			document.getElementById("searchbutton").disabled = false;
+			document.getElementById("searchbutton").innerHTML = "Search";
+        });		
+	}
+	
+	function convertsql(){
+		var path = document.getElementById("pathfromstart").value;
+		var execpath  = path.split(',');
+	
+		var level=execpath.length;
+		var querystr =document.getElementById("sqlquery").value;
+		
+		execpath.shift(); //remove first node (source)
+		var res = buildquery(execpath,"",0,querystr);
+		alert("Query:"+res);
+		return res;			
+	}
+	
+	//Translated to javascript from metasploit-framework/blob/master/modules/exploits/windows/mssql/mssql_linkcrawler.rb
+	function buildquery(path,sql,ticks,execute){
+		var temp = [];
+		var l = 0;
+		try{
+			l= path.length;
+		}
+		catch(err){
+			l=0;
+		}
+		
+		for (var  v = 0; v < l ; v++){
+			temp.push(path[v]);
+		}
+		if(l == 0) {
+		  var retstr = execute.replace(/'/g,"'".repeat(Math.pow(2,ticks)));
+		  return retstr;
+		} 
+		else {
+		  var sqlret = "select * from openquery(\"" + temp.shift() + "\"," + "'".repeat(Math.pow(2,ticks)) + buildquery(temp,sql,ticks+1,execute) + "'".repeat(Math.pow(2,ticks)) + ")";
+		  return sqlret;
+		}
+	}
+	
+	//var sqlresults= {}
+	
+	function sendsqlall(){
+		dbresults = new Map();
+	
+		document.getElementById("showresults").checked = false;
+		respanels(false);
+	
+	
+		var querystr =document.getElementById("sqlquery").value;
+		var ssQuery = document.getElementById("serverquery").value;
+		var dsQuery = document.getElementById("dataquery").value;
+		var usQuery = document.getElementById("userquery").value;
+		var psQuery = document.getElementById("passquery").value;
+		var dbQuery = document.getElementById("dbtype").value;
+		
+		document.getElementById("sendsqlall").disabled = true;
+		document.getElementById("sendsqlall").innerHTML = "Wait... ";
+   
+		
+		d3.selectAll('g.node').each(function(d) {
+			//d3.select(this) // Transform to d3 Object	
+
+			$.post( "/shortpath", {
+				src: ssQuery,
+				dst: d.name
+			},
+			function(data,status){	
+				var arrp=data;
+				//alert(arrp);
+				
+				try {
+					arrp.shift(); //remove first node (source)
+				
+					var res = buildquery(arrp,"",0,querystr);
+					jQuery.ajaxSetup({async:false});		
+					$.post( "/basicquery", {
+						query: res,
+						driver: dbQuery,
+						server: ssQuery.toUpperCase(),
+						userid: usQuery,
+						passid: psQuery,
+						database: dsQuery
+					},
+					function(data,status){
+						//alert("name:" +d.name + " " +data);
+						dbresults.set(d.name,data);
+						//alert(dbresults);
+					});
+					jQuery.ajaxSetup({async:true});
+				}
+				catch(err){
+					dbresults.set(d.name,"!");
+				}
+			});
+		});
+		
+		document.getElementById("sendsqlall").disabled = false;
+		document.getElementById("sendsqlall").innerHTML = "Query ALL";
+		
+		alert("Query complete. Check the checkbox or use download button to download the results");
+		
+		document.getElementById("showresults").checked = false;
+		respanels(false);
+   
+	}
+	
+	function sendsql(){
+		//dbresults = new Map();
+	
+		document.getElementById("showresults").checked = false;
+		respanels(false);
+	
+		var path = document.getElementById("pathfromstart").value;
+		var execpath  = path.split(',');
+		var level=execpath.length;
+		var querystr =document.getElementById("sqlquery").value;
+		var ssQuery = document.getElementById("serverquery").value;
+		var dsQuery = document.getElementById("dataquery").value;
+		var usQuery = document.getElementById("userquery").value;
+		var psQuery = document.getElementById("passquery").value;
+		var dbQuery = document.getElementById("dbtype").value;
+		
+		//document.getElementById("querysql").disabled = true;
+		//document.getElementById("querysql").innerHTML = "Wait... ";
+		var issource = false;
+		
+		if(execpath.length == 1 && execpath[0] == ssQuery.toUpperCase()){
+		 issource = true;
+		}
+		
+		try{
+		execpath.shift(); //remove first node (source)
+		}
+		catch(err){
+			execpath  = path.split(',');
+		}
+		
+		
+		var res = buildquery(execpath,"",0,querystr);
+		//alert("R:"+execpath + " "+res);
+		
+		jQuery.ajaxSetup({async:false});
+		$.post( "/basicquery", {
+			query: res,
+			driver: dbQuery,
+			server: ssQuery.toUpperCase(),
+			userid: usQuery,
+			passid: psQuery,
+			database: dsQuery
+		},
+        function(data,status){
+			if(issource){
+				dbresults.set(ssQuery.toUpperCase(), data);
+			}
+			else{
+			dbresults.set(execpath[execpath.length - 1].toUpperCase(), data);
+			//alert(execpath[execpath.length - 1].toUpperCase() + " " + data);
+			}
+        });
+		jQuery.ajaxSetup({async:true});
+
+		alert("Query complete");
+		
+		document.getElementById("showresults").checked = false;
+		respanels(false);	
+	}
+	
+	var csv=""
+	
+	// Modified from https://code-maven.com/create-and-download-csv-with-javascript by Gabor Szabo
+	function download_csv() {
+		csv="";
+		dbresults.forEach(tocsv);
+		
+		//alert(jsont);
+		
+		var hiddenElement = document.createElement('a');
+		hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+		hiddenElement.target = '_blank';
+		hiddenElement.download = 'dbresults.csv';
+		hiddenElement.click();
+	}
+	
+	function tocsv(values,key) {
+		var newrow = key + "," + values;
+		csv = newrow +"\n" + csv;
+	}
+	
+	function logMapElements(value, key, map) {
+		line = map.get('${key}') + " " + JSON.stringify('${value}');
+	}
+		
+	function refreshSVG(){
+		document.getElementById("showresults").checked = false;
+		respanels(false);
+		
+		
+		var type = "SQL Server";
+		jQuery.ajaxSetup({async:false});
+		$.get("/knowType", function(data) {
+			type = data.engine
+		});
+		
+		jQuery.ajaxSetup({async:true});
+					
+		<!-- draw graph -->
+					
+		var colors = d3.scaleOrdinal(d3.schemeCategory10);
+
+		var svg = d3.select("svg"),
+			width = +svg.attr("width"),
+			height = +svg.attr("height"),
+			node,
+			link;
+			svg.selectAll("*").remove();
+
+		svg.append('defs').append('marker')
+			.attrs({'id':'arrowhead',
+				'viewBox':'-0 -5 10 10',
+				'refX':13,
+				'refY':0,
+				'orient':'auto',
+				'markerWidth':9,
+				'markerHeight':13,
+				'xoverflow':'visible'})
+			.append('svg:path')
+			.attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+			.attr('fill', '#403f45')
+			.style('stroke','none');
+		
+	
+		var simulation = d3.forceSimulation()
+			.force("link", d3.forceLink().id(function (d) {return d.id;}).distance(document.getElementById("myRange").value).strength(1))
+			.force("charge", d3.forceManyBody())
+			.force("center", d3.forceCenter((document.getElementById("headnav").offsetWidth) / 2, (screen.height-document.getElementById("logopane").offsetHeight) / 2));
+		
+		d3.json("/getdata", function (error, graph) {
+			if (error) throw error;
+			
+			graph.nodes.forEach(function(d) {
+			d.selected = false;
+			d.previouslySelected = false;
+			});
+		
+			update(graph.links, graph.nodes);
+			
+			var selectlist = document.getElementById("targetlist");
+			selectlist.innerHTML = '';
+			var optArray = [];
+			for (var i = 0; i < graph.nodes.length; i++) {
+				optArray.push(graph.nodes[i].name);
+			}
+			optArray = optArray.sort();
+			for (var i = 0; i < optArray.length; i++) {
+				var optionNode = document.createElement("option");
+				optionNode.value = optArray[i];
+				// optionNode.appendChild(document.createTextNode("TEXT"));
+				// Add the optionNode to the datalist
+				selectlist.appendChild(optionNode);
+			}
+		})
+
+		function update(links, nodes) {
+			link = svg.selectAll(".link")
+				.data(links)
+				.enter()
+				.append("line")
+				.attr("class", "link")
+				.attr('marker-end','url(#arrowhead)')
+
+			link.append("title")
+				.text(function (d) {return d.type;});
+
+			edgepaths = svg.selectAll(".edgepath")
+				.data(links)
+				.enter()
+				.append('path')
+				.attrs({
+					'class': 'edgepath',
+					'fill-opacity': 0,
+					'stroke-opacity': 0,
+					'id': function (d, i) {return 'edgepath' + i}
+				})
+				.style("pointer-events", "none");
+
+			edgelabels = svg.selectAll(".edgelabel")
+				.data(links)
+				.enter()
+				.append('text')
+				.style("pointer-events", "none")
+				.attrs({
+					'class': 'edgelabel',
+					'id': function (d, i) {return 'edgelabel' + i},
+					'font-size': 9,
+					'fill': '#403f45',
+					'dy': -3
+				});
+
+			edgelabels.append('textPath')
+				.attr('xlink:href', function (d, i) {return '#edgepath' + i})
+				.style("text-anchor", "middle")
+				.style("pointer-events", "none")
+				.attr("startOffset", "50%")
+				.text(function (d) {return d.type});
+
+			node = svg.selectAll(".node")
+				.data(nodes)
+				.enter()
+				.append("g")
+				.attr("class", "node")
+				.on("mouseover", mouseover)
+				.on("mouseout", mouseout)
+				.on("mousedown", mousedowned)
+				.on("dblclick", showinfo)
+				.on("contextmenu", function(data, index) {
+						cleardbinput();
+						document.getElementById("serverquery").value=d3.select(this).node().__data__.name;
+						d3.event.preventDefault();
+				})		
+				.call(d3.drag()
+						.on("start", dragstarted)
+						.on("drag", dragged)
+						//.on("end", dragended)
+				);
+			
+			
+			node.append("circle")
+				.attr("r", function(d){ return d.name.toUpperCase()==document.getElementById("serverquery").value.toUpperCase() ? 10 : 6 })
+				.style("fill", function (d, i) {return colors(i);})
+
+			node.append("title")
+				.text(function (d) {return d.id;});
+				
+			/* node.append("image")
+							.attr("xlink:href", function(){ return type=='SQL Server' ? "{{ url_for('static', filename='icons/db.ico') }}" : "{{ url_for('static', filename='icons/db.ico') }}" })
+							.attr("x", -25)
+							.attr("y", -25)
+							.attr("class", "sqlserver")
+							.attr("height", 50)
+							.attr("width", 50);	*/
+
+			node.append("text")
+				.attr("dy", -9) /*position of node label*/
+				.text(function (d) {return d.label;});
+				
+			node.append("rect")
+				.attr('class', 'rectres')
+                .attr("width", 100)
+                .attr("height", 100);
+			
+			node.append("text")	
+				.attr("class", "result")
+				.attr("text-anchor", "middle")
+				.attr("dy", +9) /*position of node label*/
+				.text(function (d) {
+			
+					if (dbresults.size > 0){
+						return dbresults.get(d.name);
+					}
+					else{
+						return "No results";
+					}
+					})
+				.call(wrap, 100);
+
+			
+			//showresults();
+			respanels(false);
+				
+				/*.text(function (d) {return d.name+":"+d.label;});*/
+				
+			/*node.on("click",function(d){
+							console.log("clicked", d.name);
+							<!-- d3.select("svg").remove(); -->
+							<!-- expand(d.url);-->
+						});	*/
+
+			simulation
+				.nodes(nodes)
+				.on("tick", ticked);
+
+			simulation.force("link")
+				.links(links);
+		}
+
+		function mouseover() {
+			d3.select(this).select("circle").transition()
+				.duration(100)
+				.attr("r", 12);
+		}
+
+		function mouseout() {
+			d3.select(this).select("circle").transition()
+				.duration(100)
+				.attr("r", 6);
+		}
+		
+		function mousedowned(d) {
+			d3.select(this).classed("selected", d.selected = !d.selected);
+			if (!d.selected) {
+				node.classed("selected", function(p) { return p.selected = d === p; });
+			}
+		}
+		
+		function cleardbinput() {
+			document.getElementById("serverquery").value="";
+			document.getElementById("dataquery").value="";
+			document.getElementById("userquery").value="";
+			document.getElementById("passquery").value="";
+			document.getElementById("maxlevel").value="3";
+		}
+
+		function showinfo(d) {
+		
+			var dest = d3.select(this).node().__data__;
+			var svg = d3.select("svg");
+			
+			document.getElementById("pathfromstart").innerHTML = "None";
+			
+			document.getElementById("selectednode").innerHTML = dest.name;
+			
+			jQuery.ajaxSetup({async:false});
+			$.post( "/shortpath", {
+				src: document.getElementById("serverquery").value,
+				dst: dest.name
+			},
+			function(data,status){
+				try{
+				if (data.length > 0){
+					document.getElementById("pathfromstart").innerHTML = data;
+					//execpath = data;
+				}
+				else {
+					document.getElementById("pathfromstart").innerHTML = "None";
+				}
+				
+				
+				
+				var node = svg.selectAll(".node").filter(function(d) {
+					return !data.includes(d.name);
+				})
+			
+				var link = svg.selectAll(".link").filter(function(d,i) {
+					for (var j = 0; j < data.length - 1; j++) {
+						if (d.source.name == data[j] && d.target.name == data[j+1]){
+							return false;
+						}
+                    }				
+					return true;	
+				})
+				
+				}
+				catch(err){
+					document.getElementById("pathfromstart").innerHTML = "None";
+				}
+				
+				var edgelabels = svg.selectAll(".edgelabel")
+						  .style("opacity", 0);// hide all labels
+			// and then show them all again after some time
+
+				node.style("opacity", 0); // hide all nodes
+				link.style("opacity", 0);
+				edgelabels.style("opacity", 0);
+				//node.style("opacity", 1)// but this one
+				node.transition()
+					.duration(2000)
+					.style("opacity", 1);
+				
+				link.transition()
+					.duration(2000)
+					.style("opacity", 1);
+				
+				edgelabels.transition()
+					.duration(2000)
+					.style("opacity", 1);
+					
+					
+			});
+			jQuery.ajaxSetup({async:true});
+		}
+
+		var margin = 25;
+
+		function ticked() {
+			
+	
+	
+			node
+				.attr("transform", function (d) {return "translate(" + Math.max(margin, Math.min(width - margin, d.x)) + ", " + Math.max(margin, Math.min(height - margin, d.y)) + ")";});
+			
+			link
+				.attr("x1", function (d) {return Math.max(margin, Math.min(width - margin,d.source.x));})
+				.attr("y1", function (d) {return Math.max(margin, Math.min(height - margin,d.source.y));})
+				.attr("x2", function (d) {return Math.max(margin, Math.min(width - margin,d.target.x));})
+				.attr("y2", function (d) {return Math.max(margin, Math.min(height - margin,d.target.y));});
+			
+			edgepaths.attr('d', function (d) {
+				return 'M ' + Math.max(margin, Math.min(width - margin,d.source.x)) + ' ' + Math.max(margin, Math.min(height - margin,d.source.y)) + ' L ' + Math.max(margin, Math.min(width - margin,d.target.x)) + ' ' + Math.max(margin, Math.min(height - margin,d.target.y));
+			});
+
+			edgelabels.attr('transform', function (d) {
+				if (d.target.x < d.source.x) {
+					var bbox = this.getBBox();
+
+					rx = bbox.x + bbox.width / 2;
+					ry = bbox.y + bbox.height / 2;
+					return 'rotate(180 ' + rx + ' ' + ry + ')';
+				}
+				else {
+					return 'rotate(0)';
+				}
+			});
+			
+		}
+
+		function dragstarted(d) {
+			if (!d3.event.active) simulation.alphaTarget(0.1).restart()
+			d.fx = d.x;
+			d.fy = d.y;
+		}
+
+		function dragged(d) {
+			d.fx = d3.event.x;
+			d.fy = d3.event.y;
+		}
+
+		//    function dragended(d) {
+		//        if (!d3.event.active) simulation.alphaTarget(0);
+		//        d.fx = undefined;
+		//        d.fy = undefined;
+		//    }
+	}
+				  
+	function findNode() {
+			
+		//find the node
+		var svg = d3.select("svg");
+		var selectedVal = document.getElementById('targetNode').value;
+		var node = svg.selectAll(".node"); // select the circles
+		if (selectedVal == "none") {
+			node.style("stroke", "white").style("stroke-width", "1");
+		} else {
+			var selected = node.filter(function (d) {
+				return d.id == selectedVal;
+			});
+
+			node.style("opacity", 0); // hide all nodes
+			selected.style("opacity", 1)// but this one
+				
+			var link = svg.selectAll(".link")
+						  .style("opacity", 0);// hide all links
+			// and then show them all again after some time
+			
+			var edgelabels = svg.selectAll(".edgelabel")
+						  .style("opacity", 0);// hide all labels
+			// and then show them all again after some time
+			
+			node.transition()
+				.duration(3000)
+				.style("opacity", 1);
+			link.transition()
+				.duration(3000)
+				.style("opacity", 1);
+			edgelabels.transition()
+				.duration(3000)
+				.style("opacity", 1);
+		}
+	}
+	
+	function respanels(show){
+		var svg = d3.select("svg");
+	
+		if(show) {
+			
+			//alert('checked');
+			svg.selectAll("text.result").style("opacity", 1);
+			svg.selectAll("rect.rectres").style("opacity", 1);
+		}
+		else{
+			
+			//alert('unchecked');
+			svg.selectAll("text.result").style("opacity", 0);
+			svg.selectAll("rect.rectres").style("opacity", 0);
+		}
+	
+	}
+	
+	function showresults(){
+		var checkelem = document.getElementById("showresults");
+	
+		var svg = d3.select("svg");
+	
+		if(checkelem.checked) {
+			//alert('checked');
+			respanels(true);
+		}
+		else{
+			//alert('unchecked');
+			respanels(false);
+		}
+	
+	
+		
+		
+		var svgres = svg.selectAll("text.result").each(function(d, i) {
+			if(dbresults.size > 0){
+				var tdbres = dbresults.get(d.name);
+				if(typeof(tdbres) == 'undefined'){
+					d3.select(this).text("No response");
+				}
+				else{
+					if(tdbres.length > 0){
+					
+						d3.select(this).text(tdbres[0]);
+					}
+					else{
+						d3.select(this).text("No response");
+					}
+				}
+			}
+			else{
+				d3.select(this).text("No query");
+			}
+		});
+		
+		wrap(svgres,100);
+		
+
+	}
+	
+	//from Denis Bauszus https://jsfiddle.net/goldrydigital/qgc2g51x/
+	function wrap(text, width) {
+	
+		text.each(function() {
+			var text = d3.select(this);
+			var words = [];
+			
+
+			try{
+				//14 is the maximum number of capital letters in rect
+				words = text.text().match(/(.|[\s\S\r\n]){1,14}/g).reverse();
+			}
+			catch(err) {
+				words = [];
+			}
+			
+				//words = text.text().split(/\s+/).reverse(),
+			//var words,
+			var	word,
+				line = [],
+				lineNumber = 0,
+				lineHeight = 1.1, // ems
+				y = text.attr("y"),
+				dy = 0,
+				tspan = text.text(null).append("tspan").attr("x", width/2).attr("y", y).attr("dy", dy+2 + "em")
+			while (word = words.pop()) {
+			  line.push(word)
+			  tspan.text(line.join(" "))
+			  if (tspan.node().getComputedTextLength() > width) {
+				line.pop()
+				tspan.text(line.join(" "))
+				line = [word]
+				tspan = text.append("tspan").attr("x", width/2).attr("y", y).attr("dy", `${ lineHeight + dy}em`).text(word)
+			  }
+			}
+		})
+	}
+	
+
+	</script>
+	
+</body>
+</html>

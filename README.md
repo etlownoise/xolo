@@ -8,6 +8,8 @@ Version: 1.0
 Tool to crawl, visualize and interact with SQL server links in a d3 graph to help in your 
 red/blue/purple/.../assessments team exercises. 
 
+![screenshot](/static/icons/capture.png)
+
 Requirements:
 -------------
 

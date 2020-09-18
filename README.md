@@ -6,7 +6,7 @@ Author: ET Lownoise
 Version: 1.0
 
 Tool to crawl, visualize and interact with SQL server links in a d3 graph to help in your 
-red/blue/purple/.../assessments pentest hacking audit team exercises. 
+red/blue/purple/.../security risk assessments pentest hacking audits team exercises. 
 
 ![screenshot](/static/icons/Capture.PNG)
 
